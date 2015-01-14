@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * @file
+ * Slider install file
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function slider_install() {
+    node_types_rebuild();
+    $types = node_type_get_types();
+    add_custom_fields();
+}
+
+/**
+ * Add fields to the new content type slider
+ */
+function _slider_installed_fields() {
+    $t = get_t();
+    return array(
+        'slider_subtitle' => array(
+            'field_name' => 'slider_subtitle',
+            'label' => $t('Slider subtitle'),
+            'type' => 'text'
+        ),
+        'slider_link' => array(
+            'field_name' => 'slider_link',
+            'label' => $t('More information'),
+            'type' => 'link_field'
+        ),
+        'slider_image' => array(
+            'field_name' => 'slider_image',
+            'label' => $t('Slider image'),
+            'type' => 'image'
+        )
+    );
+}
+
+/**
+ * Instances definition for the created fields
+ */
+function _slider_installed_instances() {
+    $t = get_t();
+    return array(
+        'slider_subtitle' => array(
+            'field_name' => 'slider_subtitle',
+            'type' => 'text',
+            'label' => $t('Slider subtitle'),
+            'widget' => array(
+                'type' => 'text_textfield'
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => $t('Slider subtitle'),
+                    'type' => 'text'
+                )
+            )
+        ),
+        'slider_link' => array(
+            'field_name' => 'slider_link',
+            'type' => 'link_field',
+            'label' => $t('More information'),
+            'widget' => array(
+                'type' => 'link_field'
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => $t('More information'),
+                    'type' => 'text'
+                )
+            )
+        ),
+        'slider_image' => array(
+            'field_name' => 'slider_image',
+            'type' => 'image',
+            'label' => $t('Slider image'),
+            'widget' => array(
+                'type' => 'image'
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => $t('Slider image'),
+                    'type' => 'image'
+                )
+            )
+        ),
+    );
+}
+
+/**
+ * Read the array and create the fields and instances
+ */
+function add_custom_fields() {
+    field_info_cache_clear();
+    foreach (_slider_installed_fields() as $field) {
+        if (!field_info_field($field)) {
+            field_create_field($field);
+        }
+
+    }
+    foreach (_slider_installed_instances() as $fieldinstance) {
+        $fieldinstance['entity_type'] = 'node';
+        $fieldinstance['bundle'] = 'slider';
+//print_r($fieldinstance);
+        field_create_instance($fieldinstance);
+    }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function slider_uninstall() {
+    $ournewtype = 'slider';
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $ournewtype));
+    $nodeids = array();
+    foreach ($result as $row) {
+        $nodeids[] = $row->nid;
+    }
+    node_delete_multiple($nodeids);
+    delete_custom_fields();
+    node_type_delete($ournewtype);
+    field_purge_batch(500);
+}
+
+/**
+ * Remove custom fields and field instances
+ */
+function delete_custom_fields() {
+    foreach (array_keys(_slider_installed_instances()) as $field) {
+        field_delete_field($field);
+    }
+    $instances = field_info_instances('node', 'slider');
+    foreach ($instances as $instance_name => $fieldinstance) {
+        field_delete_instance($fieldinstance);
+    }
+}

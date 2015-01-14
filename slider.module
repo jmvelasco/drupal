@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Slider install file
+ */
+
+/**
+ * Implements hook_node_info()
+ */
+function slider_node_info() {
+    return array(
+        'slider' => array(
+            'name' => t('Slider'),
+            'base' => 'slider',
+            'description' => t('You can define your slider content here.'),
+            'has_title' => TRUE,
+            'title_label' => t('Slider')
+        )
+    );
+}
+
+/**
+ * Implement hook_form()
+ */
+function slider_form($node, $form_state) {
+    return node_content_form($node, $form_state);
+}

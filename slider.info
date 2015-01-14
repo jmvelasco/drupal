@@ -1,0 +1,4 @@
+name = Slider
+description = Manage slider contents and appereance
+package = PSA
+core = 7.x
