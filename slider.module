@@ -32,7 +32,6 @@ function slider_form($node, $form_state) {
  * This is remove the promote to frontpage, and make sticky options from node edit pages
  */
 function slider_form_alter(&$form, &$form_state, $form_id) {
-    dpm($form);
     if ('slider_node_form' == $form_id) {
         unset($form['options']['sticky']);
         unset($form['options']['promote']);
