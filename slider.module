@@ -1,22 +1,18 @@
 <?php
 
 /**
- * @file
- * Slider install file
- */
-
-/**
  * Implements hook_node_info()
  */
+
 function slider_node_info() {
     return array(
-        'slider' => array(
-            'name' => t('Slider'),
-            'base' => 'slider',
-            'description' => t('You can define your slider content here.'),
-            'has_title' => TRUE,
-            'title_label' => t('Slider')
-        )
+            'slider' => array(
+                    'name' => t('Slider'),
+                    'base' => 'slider',
+                    'description' => t('You can define you slider content here.'),
+                    'has_title' => TRUE,
+                    'title_label' => t('Slider title')
+            )
     );
 }
 
@@ -29,16 +25,75 @@ function slider_form($node, $form_state) {
 
 /**
  * Implements hook_form_alter().
- * This is remove the promote to frontpage, and make sticky options from node edit pages
  */
 function slider_form_alter(&$form, &$form_state, $form_id) {
     if ('slider_node_form' == $form_id) {
-        unset($form['options']['sticky']);
-        unset($form['options']['promote']);
-        unset($form['revision_information']);
-        unset($form['comment_settings']);
-        unset($form['menu']);
-        unset($form['author']);
-        unset($form['path']);
+        // Disable sticky
+        $form['options']['sticky']['#value'] = 0;
+        // Disable promote to frontpage
+        $form['options']['promote']['#value'] = 0;
+        // Hide options sticky and promote elements from the content creation form
+        hide($form['options']['sticky']);
+        hide($form['options']['promote']);
+
+        // Hide revision information element from the content creation form
+        hide($form['revision_information']);
+        // Hide menu settings information element from the content creation form
+        hide($form['menu']);
+        // Hide path alias element from the content creation form
+        hide($form['path']);
+    }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+
+function slider_views_api() {
+    return array ('api' => 3.0);
+}
+
+/**
+ * Get views defined at source code inside /views directory
+ */
+function slider_views_default_views() {
+    // Check for all view file in views directory
+    $files = file_scan_directory(drupal_get_path('module', 'slider') . '/views', '/.*\.inc$/');
+
+    // Add view to list of views
+    foreach ($files as $filepath => $file) {
+        require $filepath;
+        if (isset($view)) {
+            $views[$view->name] = $view;
+        }
+    }
+
+    // At the end, return array of default views.
+    return $views;
+}
+
+/**
+ * Implements hook_theme_registry_alter()
+ *
+ * Allow to define a custom template for the node
+ **/
+function slider_theme_registry_alter(&$theme_registry) {
+    $mod_path = drupal_get_path('module', 'slider');
+    $theme_registry_copy = $theme_registry;       // munge on a copy
+    _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
+    $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+    $hooks = array('node');
+    foreach ($hooks as $h) {
+        _slider_insert_after_first_element($theme_registry[$h]['theme paths'], $mod_path);
+    }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+ */
+function _slider_insert_after_first_element(&$a, $element) {
+    if(is_array($a)) {
+        $first_element = array_shift($a);
+        array_unshift($a, $first_element, $element);
     }
 }

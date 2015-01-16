@@ -10,6 +10,7 @@
  * Implements hook_install().
  */
 function slider_install() {
+    // Ensure the forum node type is available.
     node_types_rebuild();
     $types = node_type_get_types();
     add_custom_fields();
@@ -21,21 +22,21 @@ function slider_install() {
 function _slider_installed_fields() {
     $t = get_t();
     return array(
-        'slider_subtitle' => array(
-            'field_name' => 'slider_subtitle',
-            'label' => $t('Slider subtitle'),
-            'type' => 'text'
-        ),
-        'slider_link' => array(
-            'field_name' => 'slider_link',
-            'label' => $t('More information'),
-            'type' => 'link_field'
-        ),
-        'slider_image' => array(
-            'field_name' => 'slider_image',
-            'label' => $t('Slider image'),
-            'type' => 'image'
-        )
+            'slider_subtitle' => array(
+                    'field_name' => 'slider_subtitle',
+                    'label' => $t('Slider subtitle'),
+                    'type' => 'text'
+            ),
+            'slider_link' => array(
+                    'field_name' => 'slider_link',
+                    'label' => $t('More information'),
+                    'type' => 'link_field'
+            ),
+            'slider_image' => array(
+                    'field_name' => 'slider_image',
+                    'label' => $t('Slider image'),
+                    'type' => 'image'
+            )
     );
 }
 
@@ -45,48 +46,48 @@ function _slider_installed_fields() {
 function _slider_installed_instances() {
     $t = get_t();
     return array(
-        'slider_subtitle' => array(
-            'field_name' => 'slider_subtitle',
-            'type' => 'text',
-            'label' => $t('Slider subtitle'),
-            'widget' => array(
-                'type' => 'text_textfield'
-            ),
-            'display' => array(
-                'default' => array(
+            'slider_subtitle' => array(
+                    'field_name' => 'slider_subtitle',
+                    'type' => 'text',
                     'label' => $t('Slider subtitle'),
-                    'type' => 'text'
-                )
-            )
-        ),
-        'slider_link' => array(
-            'field_name' => 'slider_link',
-            'type' => 'link_field',
-            'label' => $t('More information'),
-            'widget' => array(
-                'type' => 'link_field'
+                    'widget' => array(
+                            'type' => 'text_textfield'
+                    ),
+                    'display' => array(
+                            'default' => array(
+                                    'label' => $t('Slider subtitle'),
+                                    'type' => 'text'
+                            )
+                    )
             ),
-            'display' => array(
-                'default' => array(
+            'slider_link' => array(
+                    'field_name' => 'slider_link',
+                    'type' => 'link_field',
                     'label' => $t('More information'),
-                    'type' => 'text'
-                )
-            )
-        ),
-        'slider_image' => array(
-            'field_name' => 'slider_image',
-            'type' => 'image',
-            'label' => $t('Slider image'),
-            'widget' => array(
-                'type' => 'image'
+                    'widget' => array(
+                            'type' => 'link_field'
+                    ),
+                    'display' => array(
+                            'default' => array(
+                                    'label' => $t('More information'),
+                                    'type' => 'text'
+                            )
+                    )
             ),
-            'display' => array(
-                'default' => array(
+            'slider_image' => array(
+                    'field_name' => 'slider_image',
+                    'type' => 'image',
                     'label' => $t('Slider image'),
-                    'type' => 'image'
-                )
-            )
-        ),
+                    'widget' => array(
+                            'type' => 'image'
+                    ),
+                    'display' => array(
+                            'default' => array(
+                                    'label' => $t('Slider image'),
+                                    'type' => 'image'
+                            )
+                    )
+            ),
     );
 }
 
@@ -94,17 +95,12 @@ function _slider_installed_instances() {
  * Read the array and create the fields and instances
  */
 function add_custom_fields() {
-    field_info_cache_clear();
     foreach (_slider_installed_fields() as $field) {
-        if (!field_info_field($field)) {
-            field_create_field($field);
-        }
-
+        field_create_field($field);
     }
     foreach (_slider_installed_instances() as $fieldinstance) {
         $fieldinstance['entity_type'] = 'node';
         $fieldinstance['bundle'] = 'slider';
-//print_r($fieldinstance);
         field_create_instance($fieldinstance);
     }
 }

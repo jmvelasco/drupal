@@ -1,4 +1,10 @@
 name = Slider
-description = Manage slider contents and appereance
 package = PSA
+description = Display content inside a Slider
+version = 1.0
 core = 7.x
+
+files[] = slider.install
+files[] = slider.module
+
+files[] = views/slider.inc
