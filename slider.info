@@ -6,5 +6,3 @@ core = 7.x
 
 files[] = slider.install
 files[] = slider.module
-
-files[] = views/slider.inc

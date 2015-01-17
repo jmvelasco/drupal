@@ -27,6 +27,7 @@ function slider_form($node, $form_state) {
  * Implements hook_form_alter().
  */
 function slider_form_alter(&$form, &$form_state, $form_id) {
+
     if ('slider_node_form' == $form_id) {
         // Disable sticky
         $form['options']['sticky']['#value'] = 0;
@@ -35,6 +36,12 @@ function slider_form_alter(&$form, &$form_state, $form_id) {
         // Hide options sticky and promote elements from the content creation form
         hide($form['options']['sticky']);
         hide($form['options']['promote']);
+
+        // Disable comments if the module is installed
+        if (array_key_exists('comment_settings', $form)) {
+            $form['comment_settings']['comment']['#default_value'] = 1;
+            hide($form['comment_settings']);
+        }
 
         // Hide revision information element from the content creation form
         hide($form['revision_information']);
@@ -46,54 +53,80 @@ function slider_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Implements hook_views_api().
+ * Implements hook_block_info().
  */
+function slider_block_info() {
+    $blocks = array();
 
-function slider_views_api() {
-    return array ('api' => 3.0);
+    $blocks['sliderblock'] = array(
+        'info' => t('A block to show a slider'),
+    );
+
+    return $blocks;
 }
 
 /**
- * Get views defined at source code inside /views directory
+ * Implements hook_block_view().
  */
-function slider_views_default_views() {
-    // Check for all view file in views directory
-    $files = file_scan_directory(drupal_get_path('module', 'slider') . '/views', '/.*\.inc$/');
+function slider_block_view($block_name = '') {
+    if ($block_name == 'sliderblock') {
 
-    // Add view to list of views
-    foreach ($files as $filepath => $file) {
-        require $filepath;
-        if (isset($view)) {
-            $views[$view->name] = $view;
+        $content_type = 'slider';
+
+        $query = new EntityFieldQuery();
+        $entities = $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', $content_type)
+            ->propertyCondition('status', 1)
+            ->execute();
+
+        $nodes = entity_load('node', array_keys($entities['node']));
+
+        //Loop through the loded nodes to create a list
+        //Which we will pass to the theme
+        $list = array();
+        foreach ($nodes as $node) {
+            $slider_subtitle_field  = field_get_items('node', $node, 'slider_subtitle');
+            $slider_subtitle        = field_view_value('node', $node, 'slider_subtitle', $slider_subtitle_field[0]);
+
+            $slider_link_field      = field_get_items('node', $node, 'slider_link');
+            $slider_link            = field_view_value('node', $node, 'slider_link', $slider_link_field[0]);
+
+            $slider_image_field     = field_get_items('node', $node, 'slider_image');
+            $slider_image           = field_view_value('node', $node, 'slider_image', $slider_image_field[0]);
+
+            $options = array('absolute' => TRUE);
+
+            $href = $node->slider_link[$node->language][0]['url'];
+
+            $li = '';
+            $li .= '<a href="'.$href.'" class="linkban">';
+            $li .= '<h3>'.$node->title.'</h3>';
+            $li .= '<span>'.$slider_subtitle['#markup'].'</span>';
+            $li .= '<span class="btn">'.$slider_link['#field']['label'].'</span>';
+            $li .= '<img src="'.file_create_url($slider_image['#item']['uri']).'" />';
+            $li .= '</a>';
+
+            $list[] = $li;
         }
-    }
 
-    // At the end, return array of default views.
-    return $views;
-}
+        //Return the content of the block
+        $theme_args = array('items' => $list, 'type' => 'ul');
+        $content = theme('item_list', $theme_args);
 
-/**
- * Implements hook_theme_registry_alter()
- *
- * Allow to define a custom template for the node
- **/
-function slider_theme_registry_alter(&$theme_registry) {
-    $mod_path = drupal_get_path('module', 'slider');
-    $theme_registry_copy = $theme_registry;       // munge on a copy
-    _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
-    $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
-    $hooks = array('node');
-    foreach ($hooks as $h) {
-        _slider_insert_after_first_element($theme_registry[$h]['theme paths'], $mod_path);
-    }
-}
+        $output  = '<div class="slider">';
+        $output .= '<div class="wrapper">';
+        $output .= '<div class="banner">';
+        $output .= $content;
+        $output .= '<div class="clear"></div>';
 
-/**
- * Helper function for re-ordering arrays (needed by theme_registry_alter)
- */
-function _slider_insert_after_first_element(&$a, $element) {
-    if(is_array($a)) {
-        $first_element = array_shift($a);
-        array_unshift($a, $first_element, $element);
+        $output .= '</div><!-- end banner -->';
+        $output .= '</div>';
+        $output .= '</div><!-- end .slider -->';
+
+        $block = array(
+            'subject' => t('Show Nodes Block'),
+            'content' => $output,
+        );
+        return $block;
     }
 }
