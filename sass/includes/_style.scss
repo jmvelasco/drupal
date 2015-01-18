@@ -1,0 +1,753 @@
+@import "../vars/vars";
+@import "compass";
+// @import "compass/reset";
+@import "normalize";
+/*@import "susy";
+@import "breakpoint";*/
+@import "jquery.mCustomScrollbar";
+@import "jquery.fs.picker";
+
+
+
+/********************************* FONTS *************************************************/
+
+@include font-face("citroenlight", font-files("citroen_light-webfont.eot", "citroen_light-webfont.woff", "citroen_light-webfont.ttf", "citroen_light-webfont.svg" ));
+
+@include font-face("citroenlight_italic", font-files("citroen_light_italic-webfont.eot", "citroen_light_italic-webfont.woff", "citroen_light_italic-webfont.ttf", "citroen_light_italic-webfont.svg" ));
+
+@include font-face("citroenbold_italic", font-files("citroen_bold_italic-webfont.eot", "citroen_bold_italic-webfont.woff", "citroen_bold_italic-webfont.ttf", "citroen_bold_italic-webfont.svg" ));
+
+@include font-face("citroenbold", font-files("citroen_bold-webfont.eot", "citroen_bold-webfont.woff", "citroen_bold-webfont.ttf", "citroen_bold-webfont.svg" ));
+
+@include font-face("citroenitalic", font-files("citroen_italic-webfont.eot", "citroen_italic-webfont.woff", "citroen_italic-webfont.ttf", "citroen_italic-webfont.svg" ));
+
+@include font-face("citroenregular", font-files("citroen_regular-webfont.eot", "citroen_regular-webfont.woff", "citroen_regular-webfont.ttf", "citroen_regular-webfont.svg" ));
+
+
+
+/*********************************End  FONTS *************************************************/
+
+body
+{
+    color: $first-color;
+    position: relative;
+}
+
+.clear
+{
+    clear: both;
+}
+
+a
+{
+    text-decoration: none;
+    color:inherit;
+}
+
+.wrapper
+{
+    width: $xl-screen;
+    margin: 0 auto;
+    position: relative;
+    // background:rgba(255,0,0,0.1);
+}
+
+.btn
+{
+    display: inline-block;
+    background:$first-color;
+    color: white;
+    border: none;
+    outline: none;
+    padding:0;
+    margin: 0;
+    
+    @include border-radius(4px);
+}
+
+header, div,nav,ul,li,footer,h1,h2,h3,h4,h5,h6,p
+{
+    margin:0;
+    padding:0;
+}
+li
+{
+    list-style: none;
+}
+
+
+main#home h2
+{
+    color: $second_color;
+    position: relative;
+    font-family: "citroenbold";
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: 200;
+    letter-spacing: 5px;
+    &:before
+    {
+        content: url('../img/h3-bg-purple.png');
+        position: absolute;
+        top:10px;
+        left: -2px;
+    }
+}
+
+main#home h3, .home-prefooter h3
+{
+    font-family: "citroenbold";
+    font-size: 22px;
+    font-weight: 200;
+    margin:0;
+    text-transform: uppercase;
+    line-height: 22px;
+
+    &:before
+    {
+        content: url('../img/h3-bg.png');
+        position: absolute;
+    }
+}
+
+
+
+#pre-header
+{
+    min-height: 32px;
+    line-height: 12px;
+
+    .wrapper
+    {
+        width: 100%;
+		
+		#notifs
+		{
+			float: right;
+			background: #002d3d;
+			min-height: 32px;
+			width: 32px;
+			position: relative;
+			cursor: pointer;
+			margin-right: 3px;
+			
+			i
+            {
+                display: inline-block;
+                margin: 5px 0px 0px 10px;
+                width: 22px;
+                height: 19px;
+                background:url(../img/sprite.png) no-repeat 0 -415px;
+                float: left;
+            }
+				span.red_circle{
+					font-family: "citroenlight";
+					border-radius: 20px;
+					background: red;
+					font-size: 9px;
+					text-align: center;
+					display: block;
+					width: 13px;
+					height: 13px;
+					line-height: 14px;
+					position: absolute;
+					top: 4px;
+					right: 2px;
+					}
+		}
+		
+        #accnt
+        {
+            float: right;
+            background: #002d3d;
+            min-height: 32px;
+            width: 160px;
+            position: relative;
+            cursor: pointer;
+
+            i
+            {
+                display: inline-block;
+                margin: 5px 10px 0px;
+                width: 22px;
+                height: 19px;
+                background:url(../img/accnt-ico.png) no-repeat;
+                float: left;
+            }
+            span
+            {
+                display: inline-block;
+                line-height: 30px;
+                width: 148px;
+                float: right;
+                // word-wrap:d
+            }
+
+            .accnt-option
+            {
+                position: absolute;
+                display: none;
+                margin-top: 2px;
+                background:red;
+				z-index: 3;
+
+                ul
+                {
+                    margin:0;
+                    padding: 9px 0;
+                    background:#001f2f;
+
+                    li
+                    {
+                        margin:0;
+                        padding:0;
+                        line-height: 22px;
+                        display: inline-block;
+                        width: 100%;
+                        // background:$first-color;
+
+                        i.my-accnt
+                        {
+                            margin: 6px 5px 0px 15px;
+                            background:url(../img/my-accnt.png) no-repeat;
+                        }
+
+                        i.disconnect
+                        {
+                            margin: 6px 5px 0px 15px;
+                            background:url(../img/disconnect.png) no-repeat;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        background:$first-color;
+        color: white;
+        text-transform: uppercase;
+        font-family: "citroenlight";
+        font-size: 12px;
+        font-weight: 400;
+        ul
+        {
+            margin:0;
+            padding: 0;
+            li
+            {
+                list-style: none;
+                display: inline-block;
+                padding: 10px 0;
+                margin-left: 16px;
+
+                &:first-child
+                {
+                    margin-left: 25px;
+                }
+            }
+        }
+    }
+}
+
+header
+{
+    margin-top: 10px;
+    .wrapper
+    {
+        width: 100%;
+        div.logo
+        {
+            float: left;
+            // margin-left: 25px;
+        }
+
+        nav
+        {
+            // float: left;
+            // margin: 20px 0 0 0;
+            font-family: "citroenlight";
+            font-size: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 22px;
+
+            ul
+            {
+                li
+                {
+                    display: inline-block;
+                    margin: 0 21px;
+                    position: relative;
+                    height: 64px;
+                    text-align: center;
+                    cursor: pointer;
+
+                    // &:first-child
+                    // {
+                    //     padding-left: 0px;
+                    // }
+                    // &:last-child
+                    // {
+                    //     padding-right: 0;
+                    // }
+
+                    div.image
+                    {
+                        height: 25px;
+                    }
+                    span
+                    {
+                        display: block;
+                        margin-top: 5px;
+                    }
+
+                    ul
+                    {
+                        display: none;
+                    }
+                    ul.active
+                    {
+                        display: block;
+                        position: absolute;
+                        float: left;
+                        top:64px;
+                        background:white;
+                        @include box-shadow(#e6e6e6 3px 3px 6px);
+                        z-index: 2000;
+                        font-size: 15px;
+                        padding: 13px 28px;
+
+                        li
+                        {
+                            text-align: left;
+                            display: inline-block;
+                            margin:0;
+                            padding: 5px 0;
+                            line-height: 20px;
+                            height: auto;
+                            width: 334px;
+                            color:$first-color;
+							
+                            &:hover
+                            {
+                                color: $first_color_hover;
+								font-weight: bold;
+                            }
+
+                            &:last-child
+                            {
+                                border-bottom: none;
+                            }
+                        }
+                    }
+                    &:hover, &:active
+                    {
+                        color: $first_color_hover;
+						
+                        .hover-border
+                        {
+                            display: inline-block;
+                            width: 100%;
+                            height: 3px;
+                            background:$first_color_hover;
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+							
+                        }
+
+                        // ul
+                        // {
+                        //     display: block;
+                        //     position: absolute;
+                        // }
+                    }
+                }
+            }
+        }
+
+        div.search
+        {
+            float: right;
+            width: 150px;
+            height: 27px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 50px;
+            color: $first-color;
+            font-family: "citroenlight";
+            font-size: 20px;
+
+                    border-bottom: 1px solid black;
+            form
+            {
+                input
+                {
+                    border:none;
+                    outline: none;
+                    background:transparent;
+                    width: 125px;
+                    height: 27px;
+                }
+                button
+                {
+                    border:none;
+                    outline: none;
+                    background:url(../img/btn-search.png) no-repeat;
+                    width: 14px;
+                    height: 14px;
+                    padding-top: 12px;
+                }
+            }
+        }
+    }
+}
+
+#breadcrumb
+{
+    border-top: 1px solid #d5d3d5;
+    background:#f2f2f2;
+    font-family: "citroenlight";
+    font-size: 12px;
+    text-transform: uppercase;
+    height: 29px;
+
+    ul
+    {
+        // height: 
+        li
+        {
+            display: inline-block;
+            padding: 7px 0;
+            position: relative;
+            margin: 0 16px;
+            color: #929292;
+
+            &:before
+            {
+                display: inline-block;
+                width: 12px;
+                height: 29px;
+                content: url("../img/breadcrumb-seperator.png");
+                position: absolute;
+                top: 0;
+                left: -22px;
+            }
+
+            &:last-child
+            {
+                margin-right: 0;
+                color: $first_color_hover;
+            }
+
+            &:first-child
+            {
+                margin-left: 0;
+
+                &:before
+                {
+                    content: "";
+                    width: 0;
+                    height: 0;
+                }
+            }
+
+        }
+    }
+}
+
+
+#options
+{
+    float: right;
+    li
+    {
+        display: inline-block;
+        margin-right: 15px;
+
+        &:last-child
+        {
+            margin-right: 0;
+        }
+    }
+}
+.scrollable
+{
+    margin-top: 20px;
+
+    form
+    {
+        height: 313px;
+        overflow-y: scroll;
+        width: 500px;
+        margin: 0 5px 0 18px;
+    }
+    h4
+    {
+        font-family: "citroenregular";
+        text-transform: uppercase;
+        font-size: 14px;
+        color:$second_color;
+        font-weight: 200;
+        // margin-left: 20px;
+    }
+
+    .element
+    {
+        font-family: Arial;
+        font-size: 13px;
+        border-bottom: 1px solid #f2f2f2;
+        line-height: 19px;
+        padding: 19px 0;
+        position: relative;
+        width: 473px;
+        // margin-left: 15px;
+
+        .elmt-img
+        {
+            float: left;
+            width: 50px;
+            display: inline-block;
+            text-align: center;
+
+            img
+            {
+                display: inline-block;
+                width: auto;
+            }
+        }
+
+
+        span
+        {
+            display: inline-block;
+            float: left;
+        }
+
+        input[type=checkbox]
+        {
+            float: right;
+            // margin-right: 25px;
+            position: relative;
+        }
+    }
+
+    .section
+    {
+        margin-top: 35px;
+
+        &:first-child
+        {
+            margin-top: 0px;
+        }
+    }
+
+}
+.btn-style-2
+{
+    background:transparent;
+    padding: 7px 19px;
+    border: 1px solid $second_color;
+    font-family: "citroenregular";
+    font-size: 15px;
+    color: $second_color;
+    text-align: center;
+    margin-top: 10px;
+    background:$second_color;
+    color: white;
+
+    span
+    {
+        display: inline-block;
+        margin-right: 5px;
+        font-family: Arial;
+    }
+
+    &:hover
+    {
+        background:$second_color_hover;
+    }
+
+    &.active
+    {
+        background:$second_color_hover;
+    }
+}
+
+.pre-footer-two.wrapper
+{
+    text-align: center;
+    margin-top: 35px;
+    article
+    {
+        display: inline-block;
+        width: 169px;
+        height: 148px;
+        background:$first-color;
+        font-family: "citroenregular";
+        font-size: 17px;
+        color:white;
+        box-sizing:border-box;
+        position: relative;
+        z-index: 0;
+        text-transform: uppercase;
+        margin-right: 20px;
+
+        &:last-child
+        {
+            margin-right: 0;
+        }
+
+        div.img
+        {
+            width:30px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            z-index: 100;
+            height: 50px;
+            vertical-align: middle;
+            margin-top: 35px;
+        }
+
+        p
+        {
+            position: relative;
+            z-index: 1000;
+        }
+
+        a
+        {
+            position: absolute;
+            z-index: 10000;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+    }
+}
+#sub-footer
+{
+    background:#ebebeb;
+    height: 37px;
+    margin-top: 70px;
+
+    .wrapper
+    {
+        text-align: center;
+        ul
+        {
+            li
+            {
+                    border: none;
+                    display: inline-block;
+                    width: auto;
+                a
+                {
+                    font-family: arial;
+                    font-size: 11px;
+                    line-height: 11px;
+                    color: #ababab;
+                    display: inline-block;
+                    border:none;
+                    margin:0;
+                    padding:0;
+                    list-style: none;
+                    margin-top: 14px;
+                    width: auto;
+                    width: initial;
+                    text-transform: initial;
+                    &:before
+                    {
+                        content:"";
+                        margin:0;
+                    }
+
+                    &:first-child
+                    {
+                        &:before
+                        {
+                            content:"";
+                            margin:0;
+                        }
+                    }
+                }
+
+                &:before
+                {
+                    content:"-";
+                    margin:0 4px 0 0px;
+                    color: #ababab;
+                }
+
+                &:first-child
+                {
+                    &:before
+                    {
+                        content:"";
+                        margin:0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// The wrong way of doing things but respects the design.
+.up-btn-wrapper
+{
+    max-width: 920px;
+    position: relative;
+    margin: 0 auto;
+    .up-btn
+    {
+        position: absolute;
+        width: 65px;
+        height: 65px;
+        background:url(../img/up-btn.png) no-repeat;
+        right: -174px;
+        bottom: 0px;
+        cursor: pointer;
+        display: none;
+
+    }
+}
+
+.up-btn-wrapper.DS
+{
+    max-width: 920px;
+    position: relative;
+    margin: 0 auto;
+    .up-btn
+    {
+        position: absolute;
+        width: 65px;
+        height: 65px;
+        background:url(../img/up-btn-DS.png) no-repeat;
+        right: -174px;
+        bottom: 0px;
+        cursor: pointer;
+        display: none;
+
+    }
+}
+// Follows the wright way of doing the moving up btn but does not respect the design entirely and should use a breakpoint.
+// .up-btn-wrapper
+// {
+//     max-width: 920px;
+//     position: relative;
+//     .up-btn
+//     {
+//         position: fixed;
+//         width: 65px;
+//         height: 65px;
+//         background:url(../img/up-btn.png) no-repeat;
+//         right: 70px;
+//         top: 75%;
+//         // bottom: 0;
+//         cursor: pointer;
+//         display: none;
+//  }
+// }

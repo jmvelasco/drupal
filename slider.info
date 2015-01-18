@@ -6,3 +6,7 @@ core = 7.x
 
 files[] = slider.install
 files[] = slider.module
+
+stylesheets[all][] = css/style.css
+scripts[] = js/main.js
+scripts[] = js/libs/unslider/src/unslider.js

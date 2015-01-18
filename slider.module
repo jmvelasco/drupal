@@ -27,7 +27,6 @@ function slider_form($node, $form_state) {
  * Implements hook_form_alter().
  */
 function slider_form_alter(&$form, &$form_state, $form_id) {
-
     if ('slider_node_form' == $form_id) {
         // Disable sticky
         $form['options']['sticky']['#value'] = 0;
@@ -59,7 +58,7 @@ function slider_block_info() {
     $blocks = array();
 
     $blocks['sliderblock'] = array(
-        'info' => t('A block to show a slider'),
+        'info' => t('Block to show the slider'),
     );
 
     return $blocks;
@@ -96,24 +95,32 @@ function slider_block_view($block_name = '') {
 
             $options = array('absolute' => TRUE);
 
-            $href = $node->slider_link[$node->language][0]['url'];
+            $items = array(
+                'title' => $node->title,
+                'subtitle' => $slider_subtitle['#markup'],
+                'link_label' => $slider_link['#field']['label'],
+                'link_href' => $node->slider_link[$node->language][0]['url'],
+                'image_src' => file_create_url($slider_image['#item']['uri'])
+            );
 
             $li = '';
-            $li .= '<a href="'.$href.'" class="linkban">';
-            $li .= '<h3>'.$node->title.'</h3>';
-            $li .= '<span>'.$slider_subtitle['#markup'].'</span>';
-            $li .= '<span class="btn">'.$slider_link['#field']['label'].'</span>';
-            $li .= '<img src="'.file_create_url($slider_image['#item']['uri']).'" />';
+            $li .= '<a href="'.$items['link_href'].'" class="linkban">';
+            $li .= '<h3>'.$items['title'].'</h3>';
+            $li .= '<span>'.$items['subtitle'].'</span>';
+            $li .= '<span class="btn">'.$items['link_label'].'</span>';
+            $li .= '<img src="'.$items['image_src'].'" />';
             $li .= '</a>';
 
             $list[] = $li;
+
         }
 
         //Return the content of the block
         $theme_args = array('items' => $list, 'type' => 'ul');
         $content = theme('item_list', $theme_args);
 
-        $output  = '<div class="slider">';
+        $output  = '<main id="main">';
+        $output .= '<div class="slider">';
         $output .= '<div class="wrapper">';
         $output .= '<div class="banner">';
         $output .= $content;
@@ -122,6 +129,7 @@ function slider_block_view($block_name = '') {
         $output .= '</div><!-- end banner -->';
         $output .= '</div>';
         $output .= '</div><!-- end .slider -->';
+        $output .= '</main>';
 
         $block = array(
             'subject' => t('Show Nodes Block'),
