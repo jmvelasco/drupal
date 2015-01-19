@@ -8,7 +8,7 @@ dependencies[] = link
 files[] = slider.install
 files[] = slider.module
 
-stylesheets[all][] = css/slider.css
+;stylesheets[all][] = css/slider.css
 
-scripts[] = js/libs/src/unslider.js
-scripts[] = js/slider.js
+;scripts[] = js/libs/unslider/src/unslider.js
+;scripts[] = js/slider.js

@@ -131,8 +131,21 @@ function slider_block_view($block_name = '') {
 
         $block = array(
                 'subject' => t('Show Slider Nodes Block'),
-                'content' => $output
+                'content' => array(
+                    '#markup' =>  $output,
+                    '#attached' => array (
+                        'css' => array(drupal_get_path('module', 'slider') . '/css/slider.css')
+                    )
+                )
         );
+
         return $block;
     }
+}
+
+function slider_preprocess_block(&$vars) {
+    dpm($vars);
+
+    drupal_add_js(drupal_get_path('module', 'slider') . '/js/libs/unslider/src/unslider.js', array('type' => 'file', 'scope' => 'footer'));
+
 }
