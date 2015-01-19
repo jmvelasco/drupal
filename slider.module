@@ -9,7 +9,7 @@ function slider_node_info() {
             'slider' => array(
                     'name' => t('Slider'),
                     'base' => 'slider',
-                    'description' => t('You can define you slider content here.'),
+                    'description' => t('Show defined content inside a slider.'),
                     'has_title' => TRUE,
                     'title_label' => t('Slider title')
             )
@@ -58,7 +58,7 @@ function slider_block_info() {
     $blocks = array();
 
     $blocks['sliderblock'] = array(
-        'info' => t('Block to show the slider'),
+            'info' => t('Block to show the slider'),
     );
 
     return $blocks;
@@ -70,18 +70,17 @@ function slider_block_info() {
 function slider_block_view($block_name = '') {
     if ($block_name == 'sliderblock') {
 
+        // build the query to get all slider content type nodes
         $content_type = 'slider';
-
         $query = new EntityFieldQuery();
         $entities = $query->entityCondition('entity_type', 'node')
-            ->entityCondition('bundle', $content_type)
-            ->propertyCondition('status', 1)
-            ->execute();
-
+                          ->entityCondition('bundle', $content_type)
+                          ->propertyCondition('status', 1)
+                          ->execute();
+        // get slider content-type nodes
         $nodes = entity_load('node', array_keys($entities['node']));
 
         //Loop through the loded nodes to create a list
-        //Which we will pass to the theme
         $list = array();
         foreach ($nodes as $node) {
             $slider_subtitle_field  = field_get_items('node', $node, 'slider_subtitle');
@@ -96,11 +95,11 @@ function slider_block_view($block_name = '') {
             $options = array('absolute' => TRUE);
 
             $items = array(
-                'title' => $node->title,
-                'subtitle' => $slider_subtitle['#markup'],
-                'link_label' => $slider_link['#field']['label'],
-                'link_href' => $node->slider_link[$node->language][0]['url'],
-                'image_src' => file_create_url($slider_image['#item']['uri'])
+                    'title' => $node->title,
+                    'subtitle' => $slider_subtitle['#markup'],
+                    'link_label' => $slider_link['#field']['label'],
+                    'link_href' => $node->slider_link[$node->language][0]['url'],
+                    'image_src' => file_create_url($slider_image['#item']['uri'])
             );
 
             $li = '';
@@ -119,8 +118,8 @@ function slider_block_view($block_name = '') {
         $theme_args = array('items' => $list, 'type' => 'ul');
         $content = theme('item_list', $theme_args);
 
-        $output  = '<main id="main">';
-        $output .= '<div class="slider">';
+        // Generate the output for this View Block
+        $output = '<div class="slider">';
         $output .= '<div class="wrapper">';
         $output .= '<div class="banner">';
         $output .= $content;
@@ -129,11 +128,10 @@ function slider_block_view($block_name = '') {
         $output .= '</div><!-- end banner -->';
         $output .= '</div>';
         $output .= '</div><!-- end .slider -->';
-        $output .= '</main>';
 
         $block = array(
-            'subject' => t('Show Nodes Block'),
-            'content' => $output,
+                'subject' => t('Show Slider Nodes Block'),
+                'content' => $output
         );
         return $block;
     }

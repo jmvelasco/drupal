@@ -3,10 +3,12 @@ package = PSA
 description = Display content inside a Slider
 version = 1.0
 core = 7.x
+dependencies[] = link
 
 files[] = slider.install
 files[] = slider.module
 
-stylesheets[all][] = css/style.css
-scripts[] = js/main.js
-scripts[] = js/libs/unslider/src/unslider.js
+stylesheets[all][] = css/slider.css
+
+scripts[] = js/libs/src/unslider.js
+scripts[] = js/slider.js
