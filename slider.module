@@ -86,53 +86,28 @@ function slider_block_view($block_name = '') {
             $slider_subtitle_field  = field_get_items('node', $node, 'slider_subtitle');
             $slider_subtitle        = field_view_value('node', $node, 'slider_subtitle', $slider_subtitle_field[0]);
 
-            $slider_link_field      = field_get_items('node', $node, 'slider_link');
-            $slider_link            = field_view_value('node', $node, 'slider_link', $slider_link_field[0]);
-
             $slider_image_field     = field_get_items('node', $node, 'slider_image');
             $slider_image           = field_view_value('node', $node, 'slider_image', $slider_image_field[0]);
-
-            $options = array('absolute' => TRUE);
 
             $items = array(
                     'title' => $node->title,
                     'subtitle' => $slider_subtitle['#markup'],
-                    'link_label' => $slider_link['#field']['label'],
+                    'link_label' => $node->slider_link[$node->language][0]['title'],
                     'link_href' => $node->slider_link[$node->language][0]['url'],
-                    'image_src' => file_create_url($slider_image['#item']['uri'])
+                    'image_src' => file_create_url($slider_image['#item']['uri']),
+                    'background_color' => $node->slider_background[$node->language][0]['rgb']
             );
 
-            $li = '';
-            $li .= '<a href="'.$items['link_href'].'" class="linkban">';
-            $li .= '<h3>'.$items['title'].'</h3>';
-            $li .= '<span>'.$items['subtitle'].'</span>';
-            $li .= '<span class="btn">'.$items['link_label'].'</span>';
-            $li .= '<img src="'.$items['image_src'].'" />';
-            $li .= '</a>';
-
-            $list[] = $li;
-
+            $list[] = $items;
         }
 
         //Return the content of the block
-        $theme_args = array('items' => $list, 'type' => 'ul');
-        $content = theme('item_list', $theme_args);
-
-        // Generate the output for this View Block
-        $output = '<div class="slider">';
-        $output .= '<div class="wrapper">';
-        $output .= '<div class="banner">';
-        $output .= $content;
-        $output .= '<div class="clear"></div>';
-
-        $output .= '</div><!-- end banner -->';
-        $output .= '</div>';
-        $output .= '</div><!-- end .slider -->';
+        $content = theme('slidercontent', array('items' => $list));
 
         $block = array(
                 'subject' => t('Show Slider Nodes Block'),
                 'content' => array(
-                    '#markup' =>  $output,
+                    '#markup' =>  $content,
                     '#attached' => array (
                         'css' => array(drupal_get_path('module', 'slider') . '/css/slider.css')
                     )
@@ -144,8 +119,51 @@ function slider_block_view($block_name = '') {
 }
 
 function slider_preprocess_block(&$vars) {
-    dpm($vars);
-    // Check the content type slider and add the plugin
+    // Add the slider plugin
+    drupal_add_js(drupal_get_path('module', 'slider') . '/js/slider.js', array('type' => 'file', 'scope' => 'footer'));
     drupal_add_js(drupal_get_path('module', 'slider') . '/js/libs/unslider/src/unslider.js', array('type' => 'file', 'scope' => 'footer'));
 
+}
+
+/**
+ * Implements hook_theme
+ */
+function slider_theme() {
+    return array(
+        // Define slider contents theme
+      'slidercontent' => array(
+          'variables' => array('items' => NULL),
+      ),
+    );
+}
+
+/**
+ * @param $variables['items']
+ *  Values defined for the slider content
+ * @return Markup of the slider content
+ */
+function theme_slidercontent($variables) {
+    $items = $variables['items'];
+
+    $markup = '<div class="slider">';
+    $markup .= '<div class="wrapper">';
+    $markup .= '<div class="banner">';
+    $markup .= '<ul>';
+    foreach ($items as $item) {
+        $markup .= '<li style="background:url('.$item['image_src'].') no-repeat top right; background-color: ' .  $item['background_color'] . ';">';
+        $markup .= '<a href="'.$item['link_href'].'" class="linkban">';
+        $markup .= '<h3>'.$item['title'].'</h3>';
+        $markup .= '<span>'.$item['subtitle'].'</span>';
+        $markup .= '<span class="btn">'.$item['link_label'].'</span>';
+        $markup .= '</a>';
+        $markup .= '</li>';
+    }
+    $markup .= '</ul>';
+    $markup .= '<div class="clear"></div>';
+
+    $markup .= '</div><!-- end banner -->';
+    $markup .= '</div>';
+    $markup .= '</div><!-- end .slider -->';
+
+    return $markup;
 }

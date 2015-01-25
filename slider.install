@@ -36,6 +36,11 @@ function _slider_installed_fields() {
                     'field_name' => 'slider_image',
                     'label' => $t('Slider image'),
                     'type' => 'image'
+            ),
+            'slider_background' => array(
+                    'field_name' => 'slider_background',
+                    'label' => $t('Slider background color'),
+                    'type' => 'color_field_rgb'
             )
     );
 }
@@ -88,6 +93,20 @@ function _slider_installed_instances() {
                             )
                     )
             ),
+            'slider_background' => array(
+                    'field_name' => 'slider_background',
+                    'type' => 'color_field_rgb',
+                    'label' => $t('Slider background color'),
+                    'widget' => array(
+                            'type' => 'color_field_spectrum_widget'
+                    ),
+                    'display' => array(
+                            'default' => array(
+                                    'label' => $t('Slider background color'),
+                                    'type' => 'text'
+                            )
+                    )
+),
     );
 }
 

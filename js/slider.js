@@ -3,7 +3,7 @@ jQuery(document).ready(function() {
     jQuery('.banner').unslider({
         speed: 500,
         delay: 3000,
-        complete: function() {console.log('unslider loaded');},
+        complete: function() {},
         keys: true,
         dots: true,
         fluid: false
