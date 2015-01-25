@@ -152,9 +152,9 @@ function theme_slidercontent($variables) {
     $markup .= '<ul>';
     foreach ($items as $item) {
         $markup .= '<li style="background:url('.$item['image_src'].') no-repeat top right; background-color: ' .  $item['background_color'] . ';">';
-        $markup .= '<a href="'.$item['link_href'].'" class="linkban">';
         $markup .= '<h3>'.$item['title'].'</h3>';
         $markup .= '<span>'.$item['subtitle'].'</span>';
+        $markup .= '<a href="'.$item['link_href'].'" class="linkban">';
         $markup .= '<span class="btn">'.$item['link_label'].'</span>';
         $markup .= '</a>';
         $markup .= '</li>';
