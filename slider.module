@@ -145,6 +145,7 @@ function slider_theme() {
 function theme_slidercontent($variables) {
     $items = $variables['items'];
 
+
     $markup = '<div class="slider">';
     $markup .= '<div class="wrapper">';
     $markup .= '<div class="banner">';
